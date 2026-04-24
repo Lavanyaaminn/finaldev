@@ -1,61 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import { PageLayout } from "@/frontend/components/PageLayout";
 import { motion } from "framer-motion";
 import type { Variants } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-
-const PRODUCTS = [
-  {
-    id: 1,
-    name: "Oversized Linen Tee",
-    price: "$89",
-    category: "T-Shirts",
-    tag: "New",
-    image: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=600&q=80",
-  },
-  {
-    id: 2,
-    name: "Minimal Zip Hoodie",
-    price: "$145",
-    category: "Hoodies",
-    tag: "Popular",
-    image: "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=600&q=80",
-  },
-  {
-    id: 3,
-    name: "Cargo Trouser",
-    price: "$129",
-    category: "Bottoms",
-    tag: "",
-    image: "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=600&q=80",
-  },
-  {
-    id: 4,
-    name: "Structured Overshirt",
-    price: "$165",
-    category: "Jackets",
-    tag: "Limited",
-    image: "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=600&q=80",
-  },
-  {
-    id: 5,
-    name: "Tailored Chino",
-    price: "$119",
-    category: "Bottoms",
-    tag: "",
-    image: "https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=600&q=80",
-  },
-  {
-    id: 6,
-    name: "Cashmere Knit",
-    price: "$210",
-    category: "Knitwear",
-    tag: "Exclusive",
-    image: "https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=600&q=80",
-  },
-];
+import { ALL_PRODUCTS } from "@/frontend/data/products";
+import { addCartItem, parsePrice } from "@/frontend/lib/cart";
 
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 40 },
@@ -67,6 +19,26 @@ const fadeUp: Variants = {
 };
 
 export default function ShopPage() {
+  const [addedProductId, setAddedProductId] = useState<number | null>(null);
+  const products = ALL_PRODUCTS.slice(0, 18);
+
+  const handleAddToCart = (product: (typeof ALL_PRODUCTS)[number]) => {
+    addCartItem({
+      productId: String(product.id),
+      name: product.name,
+      price: parsePrice(product.price),
+      image: product.image,
+      category: product.category,
+      description: product.description,
+      color: product.colors[0] ?? "Default",
+      size: product.sizes[0] ?? "One Size",
+      quantity: 1,
+    });
+
+    setAddedProductId(product.id);
+    setTimeout(() => setAddedProductId((current) => (current === product.id ? null : current)), 1500);
+  };
+
   return (
     <PageLayout>
       {/* Hero Banner */}
@@ -101,7 +73,7 @@ export default function ShopPage() {
       <section className="py-20 bg-[#F8F6F1]">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-            {PRODUCTS.map((product, i) => (
+            {products.map((product, i) => (
               <motion.div
                 key={product.id}
                 custom={i}
@@ -124,16 +96,28 @@ export default function ShopPage() {
                       {product.tag}
                     </span>
                   )}
-                  <div className="absolute bottom-0 left-0 right-0 py-3.5 bg-white/95 backdrop-blur-sm text-center translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out">
-                    <span className="text-[10px] tracking-[0.25em] uppercase text-stone-900 font-medium">
-                      Quick Add +
-                    </span>
+                  <div className="absolute inset-x-2 bottom-2 rounded-2xl border border-stone-200/70 bg-white/95 p-2 backdrop-blur-sm translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out">
+                    <div className="grid grid-cols-2 gap-2">
+                      <Link
+                        href={`/product/${product.id}`}
+                        className="inline-flex items-center justify-center rounded-xl border border-stone-300 px-3 py-2 text-[10px] font-medium uppercase tracking-[0.2em] text-stone-800 transition-colors hover:border-stone-900 hover:text-stone-900"
+                      >
+                        View
+                      </Link>
+                      <button
+                        type="button"
+                        onClick={() => handleAddToCart(product)}
+                        className="inline-flex items-center justify-center rounded-xl bg-stone-900 px-3 py-2 text-[10px] font-medium uppercase tracking-[0.2em] text-white transition-colors hover:bg-stone-700"
+                      >
+                        {addedProductId === product.id ? "Added" : "Add to Cart"}
+                      </button>
+                    </div>
                   </div>
                 </div>
                 <div className="flex items-start justify-between">
                   <div>
                     <p className="text-sm text-stone-800 font-medium leading-snug mb-1">{product.name}</p>
-                    <p className="text-[11px] text-stone-400 tracking-wider">{product.category}</p>
+                    <p className="text-[11px] text-stone-400 tracking-wider uppercase">{product.category}</p>
                   </div>
                   <p className="text-sm font-semibold text-stone-900 ml-2 shrink-0">{product.price}</p>
                 </div>
