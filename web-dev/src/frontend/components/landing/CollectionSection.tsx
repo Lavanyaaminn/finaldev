@@ -1,36 +1,48 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { formatCurrency } from "@/backend/services/store";
+import { addCartItem } from "@/frontend/lib/cart";
+import { addWishlistItem } from "@/frontend/lib/wishlist";
 
-const PRODUCTS = [
+type CollectionProduct = {
+  id: string;
+  name: string;
+  price: number;
+  tag: string;
+  image: string;
+};
+
+const PRODUCTS: CollectionProduct[] = [
   {
-    id: 1,
+    id: "LC-001",
     name: "Oversized Linen Tee",
-    price: "$89",
+    price: 7399,
     tag: "New",
     image: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=500&q=80",
   },
   {
-    id: 2,
+    id: "LC-002",
     name: "Minimal Zip Hoodie",
-    price: "$145",
+    price: 11999,
     tag: "Popular",
     image: "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=500&q=80",
   },
   {
-    id: 3,
+    id: "LC-003",
     name: "Cargo Trouser",
-    price: "$129",
+    price: 10699,
     tag: "",
     image: "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=500&q=80",
   },
   {
-    id: 4,
+    id: "LC-004",
     name: "Structured Overshirt",
-    price: "$165",
+    price: 13699,
     tag: "Limited",
     image: "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=500&q=80",
   },
@@ -39,6 +51,39 @@ const PRODUCTS = [
 export function CollectionSection() {
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
+  const router = useRouter();
+  const [addedProductId, setAddedProductId] = useState<string | null>(null);
+
+  const handleQuickAdd = (product: CollectionProduct) => {
+    addCartItem({
+      productId: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+      category: "New Collection",
+      description: "Landing page new collection piece.",
+      color: "Default",
+      size: "M",
+      quantity: 1,
+    });
+
+    setAddedProductId(product.id);
+    setTimeout(() => {
+      setAddedProductId((current) => (current === product.id ? null : current));
+    }, 1500);
+  };
+
+  const handleAddToWishlist = (product: CollectionProduct) => {
+    addWishlistItem({
+      productId: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+      category: "New Collection",
+      description: "Saved from landing page new collection.",
+    });
+    router.push("/wishlist");
+  };
 
   return (
     <section ref={ref} className="py-24 bg-[#F8F6F1]">
@@ -94,15 +139,21 @@ export function CollectionSection() {
                 )}
 
                 {/* Quick Add */}
-                <div className="absolute bottom-0 left-0 right-0 py-3.5 bg-white/95 backdrop-blur-sm text-center translate-y-full group-hover:translate-y-0 transition-transform duration-400 ease-out">
+                <button
+                  type="button"
+                  onClick={() => handleQuickAdd(product)}
+                  className="absolute bottom-0 left-0 right-0 py-3.5 bg-white/95 backdrop-blur-sm text-center translate-y-full group-hover:translate-y-0 transition-transform duration-400 ease-out"
+                >
                   <span className="text-[10px] tracking-[0.25em] uppercase text-stone-900 font-medium">
-                    Quick Add +
+                    {addedProductId === product.id ? "Added to Cart" : "Quick Add +"}
                   </span>
-                </div>
+                </button>
 
                 {/* Wishlist */}
                 <button
                   aria-label="Add to wishlist"
+                  type="button"
+                  onClick={() => handleAddToWishlist(product)}
                   className="absolute top-4 right-4 w-8 h-8 bg-white/90 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-stone-900 hover:text-white"
                 >
                   <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
@@ -117,7 +168,7 @@ export function CollectionSection() {
                   <p className="text-sm text-stone-800 font-medium leading-snug mb-1">{product.name}</p>
                   <p className="text-[11px] text-stone-400 tracking-wider">Premium Collection</p>
                 </div>
-                <p className="text-sm font-semibold text-stone-900 ml-2 shrink-0">{product.price}</p>
+                <p className="text-sm font-semibold text-stone-900 ml-2 shrink-0">{formatCurrency(product.price)}</p>
               </div>
             </motion.div>
           ))}
