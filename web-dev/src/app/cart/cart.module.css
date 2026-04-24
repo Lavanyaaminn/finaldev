@@ -1,0 +1,260 @@
+.hero {
+  position: relative;
+  overflow: hidden;
+  background: #1c1917;
+  color: #fafaf9;
+}
+
+.heroGlow {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 18% 24%, rgba(255, 255, 255, 0.12), transparent 44%),
+    radial-gradient(circle at 82% 0%, rgba(217, 119, 6, 0.22), transparent 35%);
+}
+
+.heroInner {
+  position: relative;
+  width: min(1120px, calc(100% - 3rem));
+  margin: 0 auto;
+  padding: 6.5rem 0 6rem;
+}
+
+.eyebrow {
+  font-size: 0.64rem;
+  text-transform: uppercase;
+  letter-spacing: 0.36em;
+  color: #d6d3d1;
+}
+
+.heroTitle {
+  margin-top: 0.95rem;
+  font-size: clamp(2.1rem, 6vw, 4.1rem);
+  line-height: 0.92;
+  text-transform: uppercase;
+  color: #fafaf9;
+}
+
+.heroLead {
+  margin-top: 1.2rem;
+  max-width: 640px;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #d6d3d1;
+}
+
+.section {
+  background: #f8f6f1;
+  padding: 3.2rem 0 4.5rem;
+}
+
+.layout {
+  width: min(1120px, calc(100% - 3rem));
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 1.5rem;
+}
+
+.card {
+  border-radius: 1.6rem;
+  border: 1px solid #e7e5e4;
+  background: #ffffff;
+  padding: 1.65rem 1.75rem;
+  box-shadow: 0 20px 70px -42px rgba(28, 25, 23, 0.46);
+}
+
+.headRow {
+  display: grid;
+  grid-template-columns: 1.5fr 0.5fr 0.8fr 0.8fr;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid #e7e5e4;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: #78716c;
+}
+
+.rows {
+  margin-top: 0.2rem;
+}
+
+.item {
+  display: grid;
+  grid-template-columns: 1.5fr 0.5fr 0.8fr 0.8fr;
+  gap: 0.85rem;
+  align-items: center;
+  padding: 1rem 0;
+  border-bottom: 1px solid #e7e5e4;
+}
+
+.name {
+  font-size: 1.03rem;
+  color: #1c1917;
+  font-weight: 600;
+}
+
+.category {
+  margin-top: 0.15rem;
+  font-size: 0.78rem;
+  color: #78716c;
+}
+
+.muted {
+  font-size: 0.93rem;
+  color: #57534e;
+}
+
+.total {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #1c1917;
+}
+
+.actions {
+  margin-top: 1.4rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 170px;
+  border-radius: 999px;
+  padding: 0.72rem 1.35rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 160ms ease;
+}
+
+.btnSecondary {
+  border: 1px solid #d6d3d1;
+  color: #1c1917;
+  background: #ffffff;
+}
+
+.btnSecondary:hover {
+  background: #f5f5f4;
+}
+
+.btnPrimary {
+  border: 1px solid #1c1917;
+  color: #fafaf9;
+  background: #1c1917;
+}
+
+.btnPrimary:hover {
+  background: #292524;
+}
+
+.summary {
+  height: fit-content;
+  border-radius: 1.6rem;
+  border: 1px solid #e7e5e4;
+  background: linear-gradient(to bottom, #ffffff, #fef3c7);
+  padding: 1.55rem 1.45rem;
+  box-shadow: 0 20px 70px -42px rgba(28, 25, 23, 0.46);
+}
+
+.summaryTitle {
+  font-size: 1.28rem;
+  color: #1c1917;
+}
+
+.summaryList {
+  margin-top: 1.15rem;
+  display: grid;
+  gap: 0.58rem;
+}
+
+.summaryLine {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.92rem;
+  color: #57534e;
+}
+
+.grand {
+  margin-top: 0.95rem;
+  padding-top: 0.95rem;
+  border-top: 1px solid #d6d3d1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.grandLabel {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: #78716c;
+}
+
+.grandValue {
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: #1c1917;
+}
+
+.checkout {
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.note {
+  margin-top: 0.95rem;
+  font-size: 0.76rem;
+  line-height: 1.5;
+  color: #78716c;
+}
+
+@media (max-width: 1080px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .heroInner,
+  .layout {
+    width: calc(100% - 1.5rem);
+  }
+
+  .heroInner {
+    padding: 5.4rem 0 4.6rem;
+  }
+
+  .card,
+  .summary {
+    padding: 1.1rem;
+    border-radius: 1.15rem;
+  }
+
+  .headRow {
+    display: none;
+  }
+
+  .item {
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+    padding: 0.9rem 0;
+  }
+
+  .metaInline {
+    display: flex;
+    gap: 0.85rem;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    width: 100%;
+  }
+
+  .grandValue {
+    font-size: 1.6rem;
+  }
+}
