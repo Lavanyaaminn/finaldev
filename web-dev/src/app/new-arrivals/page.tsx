@@ -43,8 +43,21 @@ export default function NewArrivalsPage() {
   return (
     <PageLayout>
       {/* Hero */}
-      <section className="py-20 bg-[#F5F2ED] border-b border-stone-200">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12">
+      <section className="relative overflow-hidden min-h-[520px] flex items-center border-b border-stone-900">
+        {/* Background video */}
+        <video
+          src="/Velora_fashion_advertisement_202604241402.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none select-none"
+        />
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-stone-950/90 via-stone-950/60 to-stone-950/20" />
+
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 w-full py-28">
           <motion.span
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -57,7 +70,7 @@ export default function NewArrivalsPage() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1 }}
-            className="font-heading text-6xl lg:text-8xl uppercase text-stone-900 leading-none mb-6"
+            className="font-heading text-6xl lg:text-8xl uppercase text-white leading-none mb-6"
           >
             New Arrivals
           </motion.h1>
@@ -65,7 +78,7 @@ export default function NewArrivalsPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="text-stone-500 text-base max-w-md font-light leading-relaxed"
+            className="text-stone-300 text-base max-w-md font-light leading-relaxed"
           >
             Fresh silhouettes, limited quantities, and bold colorways crafted for this season.
           </motion.p>

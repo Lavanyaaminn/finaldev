@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { getCartItemCount, readCart } from "@/frontend/lib/cart";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -16,6 +17,7 @@ const navLinks = [
 export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
+  const cartCount = getCartItemCount(readCart());
 
   // Close mobile menu on route change
   useEffect(() => {
@@ -98,7 +100,7 @@ export function Navbar() {
               <path d="M16 10a4 4 0 0 1-8 0" />
             </svg>
             <span className="absolute -top-1 -right-1 w-4 h-4 bg-stone-900 text-white text-[10px] rounded-full flex items-center justify-center font-medium">
-              2
+              {cartCount}
             </span>
           </Link>
 

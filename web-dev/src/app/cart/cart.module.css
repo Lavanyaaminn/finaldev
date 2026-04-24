@@ -3,14 +3,28 @@
   overflow: hidden;
   background: #1c1917;
   color: #fafaf9;
+  min-height: 420px;
+  display: flex;
+  align-items: center;
 }
 
-.heroGlow {
+.heroBg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  pointer-events: none;
+  user-select: none;
+}
+
+.heroOverlay {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(circle at 18% 24%, rgba(255, 255, 255, 0.12), transparent 44%),
-    radial-gradient(circle at 82% 0%, rgba(217, 119, 6, 0.22), transparent 35%);
+    linear-gradient(to right, rgba(28, 25, 23, 0.88) 42%, rgba(28, 25, 23, 0.45) 100%),
+    linear-gradient(to bottom, rgba(28, 25, 23, 0.35) 0%, rgba(28, 25, 23, 0.65) 100%);
 }
 
 .heroInner {
@@ -88,6 +102,22 @@
   border-bottom: 1px solid #e7e5e4;
 }
 
+.productCell {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.thumb {
+  width: 76px;
+  height: 92px;
+  border-radius: 1rem;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  flex-shrink: 0;
+}
+
 .name {
   font-size: 1.03rem;
   color: #1c1917;
@@ -100,6 +130,43 @@
   color: #78716c;
 }
 
+.variant {
+  margin-top: 0.3rem;
+  font-size: 0.72rem;
+  color: #a8a29e;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.qtyWrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  width: fit-content;
+  padding: 0.25rem;
+  border: 1px solid #d6d3d1;
+  border-radius: 999px;
+  background: #fafaf9;
+}
+
+.qtyButton {
+  width: 1.9rem;
+  height: 1.9rem;
+  border: 0;
+  border-radius: 999px;
+  background: #1c1917;
+  color: #fafaf9;
+  cursor: pointer;
+}
+
+.qtyValue {
+  min-width: 1.25rem;
+  text-align: center;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #1c1917;
+}
+
 .muted {
   font-size: 0.93rem;
   color: #57534e;
@@ -109,6 +176,46 @@
   font-size: 0.95rem;
   font-weight: 700;
   color: #1c1917;
+}
+
+.totalCell {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.removeButton {
+  width: fit-content;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: #a16207;
+  font-size: 0.76rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.emptyState {
+  display: grid;
+  gap: 0.85rem;
+  padding: 2rem 0 0.5rem;
+}
+
+.emptyEyebrow {
+  font-size: 0.68rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #a8a29e;
+}
+
+.emptyTitle {
+  font-size: clamp(1.8rem, 5vw, 3rem);
+  color: #1c1917;
+}
+
+.emptyText {
+  max-width: 36rem;
+  color: #57534e;
 }
 
 .actions {
@@ -244,10 +351,18 @@
     padding: 0.9rem 0;
   }
 
+  .productCell {
+    align-items: flex-start;
+  }
+
   .metaInline {
     display: flex;
     gap: 0.85rem;
     flex-wrap: wrap;
+  }
+
+  .qtyWrap {
+    margin-top: 0.35rem;
   }
 
   .btn {

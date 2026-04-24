@@ -1,17 +1,19 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { getProductById } from "@/frontend/data/products";
 import { PageLayout } from "@/frontend/components/PageLayout";
+import { addCartItem, buyNow, parsePrice } from "@/frontend/lib/cart";
 
 const STARS = [1, 2, 3, 4, 5];
 
 export default function ProductDetailPage() {
   const params = useParams();
+  const router = useRouter();
   const id = Number(Array.isArray(params.slug) ? params.slug[0] : params.slug);
   const product = getProductById(id);
 
@@ -31,11 +33,34 @@ export default function ProductDetailPage() {
     );
   }
 
-  const fullStars = Math.floor(product.rating);
+  const resolvedProduct = product;
+  const fullStars = Math.floor(resolvedProduct.rating);
+  const resolvedColor = selectedColor || resolvedProduct.colors[0] || "Default";
+  const resolvedSize = selectedSize || resolvedProduct.sizes[0] || "One Size";
+
+  function createCartItem() {
+    return {
+      productId: String(resolvedProduct.id),
+      name: resolvedProduct.name,
+      price: parsePrice(resolvedProduct.price),
+      image: resolvedProduct.image,
+      category: resolvedProduct.category,
+      description: resolvedProduct.description,
+      color: resolvedColor,
+      size: resolvedSize,
+      quantity: qty,
+    };
+  }
 
   const handleAddToCart = () => {
+    addCartItem(createCartItem());
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
+  };
+
+  const handleBuyNow = () => {
+    buyNow(createCartItem());
+    router.push("/checkout");
   };
 
   return (
@@ -127,20 +152,21 @@ export default function ProductDetailPage() {
               {/* Color */}
               <div className="mb-6">
                 <p className="text-[11px] tracking-[0.25em] uppercase text-stone-500 mb-3">
-                  Colour: <span className="text-stone-900 font-medium">{selectedColor || "Select"}</span>
+                  Colour: <span className="text-stone-900 font-medium">{selectedColor || resolvedColor}</span>
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  {product.colors.map((c) => (
+                  {product.colors.map((color) => (
                     <button
-                      key={c}
-                      onClick={() => setSelectedColor(c)}
+                      key={color}
+                      type="button"
+                      onClick={() => setSelectedColor(color)}
                       className={`px-4 py-2 text-[11px] tracking-wider uppercase border transition-all duration-200 ${
-                        selectedColor === c
+                        selectedColor === color
                           ? "border-stone-900 bg-stone-900 text-white"
                           : "border-stone-300 text-stone-700 hover:border-stone-900"
                       }`}
                     >
-                      {c}
+                      {color}
                     </button>
                   ))}
                 </div>
@@ -149,20 +175,21 @@ export default function ProductDetailPage() {
               {/* Size */}
               <div className="mb-8">
                 <p className="text-[11px] tracking-[0.25em] uppercase text-stone-500 mb-3">
-                  Size: <span className="text-stone-900 font-medium">{selectedSize || "Select"}</span>
+                  Size: <span className="text-stone-900 font-medium">{selectedSize || resolvedSize}</span>
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  {product.sizes.map((s) => (
+                  {product.sizes.map((size) => (
                     <button
-                      key={s}
-                      onClick={() => setSelectedSize(s)}
+                      key={size}
+                      type="button"
+                      onClick={() => setSelectedSize(size)}
                       className={`w-12 h-10 text-[11px] tracking-wider uppercase border transition-all duration-200 ${
-                        selectedSize === s
+                        selectedSize === size
                           ? "border-stone-900 bg-stone-900 text-white"
                           : "border-stone-300 text-stone-700 hover:border-stone-900"
                       }`}
                     >
-                      {s}
+                      {size}
                     </button>
                   ))}
                 </div>
@@ -171,12 +198,13 @@ export default function ProductDetailPage() {
               {/* Qty + Buttons */}
               <div className="flex items-center gap-3 mb-4">
                 <div className="flex items-center border border-stone-300">
-                  <button onClick={() => setQty(Math.max(1, qty - 1))} className="w-10 h-11 text-lg text-stone-600 hover:bg-stone-100 transition-colors">−</button>
+                  <button type="button" onClick={() => setQty(Math.max(1, qty - 1))} className="w-10 h-11 text-lg text-stone-600 hover:bg-stone-100 transition-colors">−</button>
                   <span className="w-10 text-center text-sm font-medium">{qty}</span>
-                  <button onClick={() => setQty(Math.min(5, qty + 1))} className="w-10 h-11 text-lg text-stone-600 hover:bg-stone-100 transition-colors">+</button>
+                  <button type="button" onClick={() => setQty(Math.min(5, qty + 1))} className="w-10 h-11 text-lg text-stone-600 hover:bg-stone-100 transition-colors">+</button>
                 </div>
                 <button
                   id="add-to-cart-btn"
+                  type="button"
                   onClick={handleAddToCart}
                   className="flex-1 h-11 bg-stone-900 text-white text-[11px] tracking-[0.3em] uppercase hover:bg-stone-700 transition-colors duration-300"
                 >
@@ -187,6 +215,10 @@ export default function ProductDetailPage() {
               <Link
                 href="/checkout"
                 id="buy-now-btn"
+                onClick={(event) => {
+                  event.preventDefault();
+                  handleBuyNow();
+                }}
                 className="block w-full h-11 border border-stone-900 text-stone-900 text-[11px] tracking-[0.3em] uppercase text-center leading-[44px] hover:bg-stone-900 hover:text-white transition-all duration-300"
               >
                 Buy Now
@@ -198,10 +230,10 @@ export default function ProductDetailPage() {
                   { icon: "↩", label: "10 Day Returns" },
                   { icon: "🚚", label: "Free Delivery" },
                   { icon: "🔒", label: "Secure Payment" },
-                ].map((b) => (
-                  <div key={b.label}>
-                    <p className="text-xl mb-1">{b.icon}</p>
-                    <p className="text-[10px] tracking-wider uppercase text-stone-500">{b.label}</p>
+                ].map((badge) => (
+                  <div key={badge.label}>
+                    <p className="text-xl mb-1">{badge.icon}</p>
+                    <p className="text-[10px] tracking-wider uppercase text-stone-500">{badge.label}</p>
                   </div>
                 ))}
               </div>
